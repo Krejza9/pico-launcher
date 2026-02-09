@@ -21,6 +21,9 @@ public:
     virtual void HideGameInfo() = 0;
     virtual void ShowDisplaySettings() = 0;
     virtual void HideDisplaySettings() = 0;
+    virtual void ShowFileActionMenu() = 0;
+    virtual void HideFileActionMenu() = 0;
+    virtual void DeleteSelectedFile() = 0;
 
     virtual void Update() = 0;
 

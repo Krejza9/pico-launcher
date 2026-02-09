@@ -63,3 +63,11 @@ void RomBrowserViewModel::ShowGameInfo()
         return;
     _romBrowserController->ShowGameInfo();
 }
+
+void RomBrowserViewModel::ShowFileActionMenu()
+{
+    const auto& item = _fileInfoManager->GetItem(_selectedItem);
+    if (item.GetFileType()->GetClassification() == FileTypeClassification::Folder)
+        return;
+    _romBrowserController->ShowFileActionMenu();
+}

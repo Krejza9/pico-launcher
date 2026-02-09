@@ -4,6 +4,7 @@ Debug/
 Release/
 build/
 out/
+.idea
 
 # Compiled source #
 ###################

@@ -21,6 +21,7 @@
 #include "romBrowser/Theme/Material/MaterialThemeFileIconFactory.h"
 #include "romBrowser/views/NdsGameDetailsBottomSheetView.h"
 #include "romBrowser/views/DisplaySettingsBottomSheetView.h"
+#include "romBrowser/views/FileActionMenuBottomSheetView.h"
 #include "bgm/AudioStreamPlayer.h"
 #include "bgm/BgmService.h"
 #include "themes/ThemeInfoFactory.h"
@@ -49,7 +50,7 @@ App::App(IAppSettingsService& appSettingsService, IBgmService& bgmService)
     , _romBrowserController(&appSettingsService, &_ioTaskQueue, &_bgTaskQueue)
     , _displaySettingsBottomSheetViewModel(&_romBrowserController)
     , _romBrowserBottomScreenViewModel(&_romBrowserController)
-    , _dialogPresenter(&_focusManager, &_mainObjDialogVram) { }
+    , _dialogPresenter(&_focusManager, &_mainObjDialogVram, &_textureVram, &_texturePaletteVram) { }
 
 void App::InitVramMapping() const
 {
@@ -285,6 +286,16 @@ void App::HandleTrigger(RomBrowserStateTrigger trigger, RomBrowserState newState
             HandleFolderLoadDoneTrigger();
             break;
         }
+        case RomBrowserStateTrigger::ShowFileActionMenu:
+        {
+            HandleShowFileActionMenuTrigger();
+            break;
+        }
+        case RomBrowserStateTrigger::HideFileActionMenu:
+        {
+            HandleHideFileActionMenuTrigger();
+            break;
+        }
         case RomBrowserStateTrigger::ChangeDisplayMode:
         {
             _changeDisplayMode = true;
@@ -317,6 +328,24 @@ void App::HandleShowDisplaySettingsTrigger()
 }
 
 void App::HandleHideDisplaySettingsTrigger()
+{
+    _dialogPresenter.CloseDialog();
+    if (!_dialogPresenter.GetOldFocus())
+        _romBrowserBottomScreenView->Focus(_focusManager);
+}
+
+void App::HandleShowFileActionMenuTrigger()
+{
+    auto viewModel = _romBrowserController.GetRomBrowserViewModel();
+    const auto& item = viewModel->GetFileInfoManager().GetItem(viewModel->GetSelectedItem());
+    auto fileActionMenuDialog = std::make_unique<FileActionMenuBottomSheetView>(
+        &_romBrowserController, &_theme->GetMaterialColorScheme(), _theme->GetFontRepository(),
+        item.GetFileName());
+    fileActionMenuDialog->SetGraphics(_chipViewVram);
+    _dialogPresenter.ShowDialog(std::move(fileActionMenuDialog));
+}
+
+void App::HandleHideFileActionMenuTrigger()
 {
     _dialogPresenter.CloseDialog();
     if (!_dialogPresenter.GetOldFocus())
@@ -378,6 +407,7 @@ bool App::IsRomBrowserVisible() const
     return curState == RomBrowserState::Browser
         || curState == RomBrowserState::GameInfo
         || curState == RomBrowserState::DisplaySettings
+        || curState == RomBrowserState::FileActionMenu
         || curState == RomBrowserState::Launching;
 }
 

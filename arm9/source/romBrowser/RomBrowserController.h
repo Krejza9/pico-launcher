@@ -27,6 +27,9 @@ public:
     void HideGameInfo() override;
     void ShowDisplaySettings() override;
     void HideDisplaySettings() override;
+    void ShowFileActionMenu() override;
+    void HideFileActionMenu() override;
+    void DeleteSelectedFile() override;
 
     void Update() override;
 
@@ -59,8 +62,10 @@ private:
     TCHAR _navigatePath[256];
     TCHAR* _navigateFileName;
     FileInfo _launchFileInfo;
+    FileInfo _deleteFileInfo;
     QueueTask<void> _navigateTask;
     bool _saveSettingsPending = false;
+    bool _pendingReload = false;
     std::unique_ptr<CoverRepository> _coverRepository;
     ExtensionFileTypeProvider _fileTypeProvider;
 

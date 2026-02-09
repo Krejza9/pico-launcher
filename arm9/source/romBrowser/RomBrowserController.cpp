@@ -57,6 +57,31 @@ void RomBrowserController::HideDisplaySettings()
     _stateMachine.Fire(RomBrowserStateTrigger::HideDisplaySettings);
 }
 
+void RomBrowserController::ShowFileActionMenu()
+{
+    const auto& item = _romBrowserViewModel->GetFileInfoManager().GetItem(
+        _romBrowserViewModel->GetSelectedItem());
+    _deleteFileInfo = FileInfo(item);
+    _stateMachine.Fire(RomBrowserStateTrigger::ShowFileActionMenu);
+}
+
+void RomBrowserController::HideFileActionMenu()
+{
+    _stateMachine.Fire(RomBrowserStateTrigger::HideFileActionMenu);
+}
+
+void RomBrowserController::DeleteSelectedFile()
+{
+    _ioTaskQueue->Enqueue([this] (const vu8& cancelRequested)
+    {
+        FRESULT res = f_unlink(_deleteFileInfo.GetFileName());
+        LOG_DEBUG("f_unlink('%s') result: %d\n", _deleteFileInfo.GetFileName(), res);
+        return TaskResult<void>::Completed();
+    });
+    _pendingReload = true;
+    _stateMachine.Fire(RomBrowserStateTrigger::HideFileActionMenu);
+}
+
 void RomBrowserController::SetRomBrowserDisplaySettings(
     const RomBrowserDisplaySettings& romBrowserDisplaySettings)
 {
@@ -71,6 +96,12 @@ void RomBrowserController::Update()
     if (_stateMachine.HasStateChanged())
     {
         HandleTrigger();
+    }
+    if (_pendingReload && _stateMachine.GetCurrentState() == RomBrowserState::Browser)
+    {
+        _pendingReload = false;
+        NavigateToPath(".");
+        return;
     }
     switch (_stateMachine.GetCurrentState())
     {

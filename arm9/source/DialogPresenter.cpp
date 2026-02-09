@@ -9,8 +9,10 @@
 #include "gui/GraphicsContext.h"
 #include "DialogPresenter.h"
 
-DialogPresenter::DialogPresenter(FocusManager* focusManager, StackVramManager* vramManager)
+DialogPresenter::DialogPresenter(FocusManager* focusManager, StackVramManager* vramManager,
+    StackVramManager* texVramManager, StackVramManager* texPlttVramManager)
     : _focusManager(focusManager), _vramManager(vramManager)
+    , _texVramManager(texVramManager), _texPlttVramManager(texPlttVramManager)
     , _scrimAnimator(0), _yAnimator(192)
 {
     _baseVramState = _vramManager->GetState();
@@ -120,7 +122,7 @@ void DialogPresenter::VBlank()
     if (_initVram && _currentDialog)
     {
         _vramManager->SetState(_baseVramState);
-        _currentDialog->InitVram(VramContext(nullptr, _vramManager, nullptr, nullptr));
+        _currentDialog->InitVram(VramContext(nullptr, _vramManager, _texVramManager, _texPlttVramManager));
         _initVram = false;
     }
 

@@ -27,6 +27,7 @@ public:
     void ItemActivated();
     void NavigateUp();
     void ShowGameInfo();
+    void ShowFileActionMenu();
 
 private:
     IRomBrowserController* _romBrowserController;
