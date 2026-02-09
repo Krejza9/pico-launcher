@@ -53,4 +53,5 @@ private:
     u32 _scrollFrameCounter;
     bool _needsScroll;
     bool _scrollPaused;
+    bool _chipSelected;
 };

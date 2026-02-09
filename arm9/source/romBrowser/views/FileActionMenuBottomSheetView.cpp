@@ -20,6 +20,7 @@ FileActionMenuBottomSheetView::FileActionMenuBottomSheetView(
     , _scrollFrameCounter(0)
     , _needsScroll(false)
     , _scrollPaused(true)
+    , _chipSelected(false)
 {
     // Convert to char16_t and measure
     char16_t fileNameU16[LABEL_MAX_LEN + 1];
@@ -110,7 +111,10 @@ void FileActionMenuBottomSheetView::Draw(GraphicsContext& graphicsContext)
 View* FileActionMenuBottomSheetView::MoveFocus(View* currentFocus,
     FocusMoveDirection direction, View* source)
 {
-    return nullptr;
+    _chipSelected = !_chipSelected;
+    _deleteChip.SetSelected(_chipSelected);
+    return &_deleteChip;
+
 }
 
 bool FileActionMenuBottomSheetView::HandleInput(const InputProvider& inputProvider, FocusManager& focusManager)
@@ -122,7 +126,7 @@ bool FileActionMenuBottomSheetView::HandleInput(const InputProvider& inputProvid
     }
     else if (inputProvider.Triggered(InputKey::A))
     {
-        if (focusManager.IsFocusInside(&_deleteChip))
+        if (_chipSelected && focusManager.IsFocusInside(&_deleteChip))
         {
             _romBrowserController->DeleteSelectedFile();
             return true;
