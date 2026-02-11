@@ -56,11 +56,6 @@ FileActionMenuBottomSheetView::FileActionMenuBottomSheetView(
     AddChildTail(&_deleteChip);
 }
 
-void FileActionMenuBottomSheetView::InitVram(const VramContext& vramContext)
-{
-    BottomSheetView::InitVram(vramContext);
-}
-
 void FileActionMenuBottomSheetView::Update()
 {
     BottomSheetView::Update();

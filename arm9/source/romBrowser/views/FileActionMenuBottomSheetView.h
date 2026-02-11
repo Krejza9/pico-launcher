@@ -21,8 +21,6 @@ public:
         _deleteChip.SetGraphics(chipVramToken);
     }
 
-    void InitVram(const VramContext& vramContext) override;
-
     void Update() override;
     void Draw(GraphicsContext& graphicsContext) override;
 

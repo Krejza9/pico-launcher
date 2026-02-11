@@ -50,7 +50,7 @@ App::App(IAppSettingsService& appSettingsService, IBgmService& bgmService)
     , _romBrowserController(&appSettingsService, &_ioTaskQueue, &_bgTaskQueue)
     , _displaySettingsBottomSheetViewModel(&_romBrowserController)
     , _romBrowserBottomScreenViewModel(&_romBrowserController)
-    , _dialogPresenter(&_focusManager, &_mainObjDialogVram, &_textureVram, &_texturePaletteVram) { }
+    , _dialogPresenter(&_focusManager, &_mainObjDialogVram) { }
 
 void App::InitVramMapping() const
 {

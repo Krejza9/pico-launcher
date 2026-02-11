@@ -10,8 +10,7 @@ class FocusManager;
 class DialogPresenter
 {
 public:
-    DialogPresenter(FocusManager* focusManager, StackVramManager* vramManager,
-        StackVramManager* texVramManager = nullptr, StackVramManager* texPlttVramManager = nullptr);
+    DialogPresenter(FocusManager* focusManager, StackVramManager* vramManager);
 
     /// @brief Requests to show the given dialog.
     /// @param dialog The dialog to show.
@@ -65,8 +64,6 @@ private:
 
     FocusManager* _focusManager;
     StackVramManager* _vramManager;
-    StackVramManager* _texVramManager;
-    StackVramManager* _texPlttVramManager;
     u32 _baseVramState;
     std::unique_ptr<DialogView> _currentDialog;
     std::unique_ptr<DialogView> _nextDialog;
