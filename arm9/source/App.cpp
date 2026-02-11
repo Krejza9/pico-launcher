@@ -432,6 +432,17 @@ void App::Update()
         _focusManager.Update(_inputRepeater);
     }
 
+    _touchProvider.Update();
+    if (_touchProvider.Triggered() && isRomBrowserVisible && !_exit
+        && curState != RomBrowserState::Launching)
+    {
+        Point touchPos = _touchProvider.GetPosition();
+        if (!_dialogPresenter.HandleTouch(touchPos, _focusManager))
+        {
+            _romBrowserBottomScreenView->HandleTouch(touchPos, _focusManager);
+        }
+    }
+
     if (_topBackground)
         _topBackground->Update();
     if (_bottomBackground)
@@ -503,6 +514,7 @@ void App::VBlank()
 {
     dma_ntrStopDirect(0); // stop hblank dma
     _inputProvider.Sample();
+    _touchProvider.Sample();
     _inputRepeater.Update();
     _mainOam.Apply(GFX_OAM_MAIN);
     _subOam.Apply(GFX_OAM_SUB);

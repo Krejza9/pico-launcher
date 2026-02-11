@@ -29,6 +29,7 @@ public:
     Rectangle GetBounds() const override;
     void Update() override;
     View* MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
     void Focus(FocusManager& focusManager, int button);
 
     constexpr Orientation GetOrientation() const { return _orientation; }

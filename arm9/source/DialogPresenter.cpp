@@ -30,6 +30,19 @@ void DialogPresenter::CloseDialog()
     _newState = State::BottomSheetClosing;
 }
 
+bool DialogPresenter::HandleTouch(const Point& touchPos, FocusManager& focusManager)
+{
+    if (!_currentDialog || _curState != State::BottomSheetVisible)
+        return false;
+
+    if (_currentDialog->GetBounds().Contains(touchPos))
+        return _currentDialog->HandleTouch(touchPos, focusManager);
+
+    // Tap on scrim = dismiss dialog through controller
+    _currentDialog->Dismiss();
+    return true;
+}
+
 void DialogPresenter::Update()
 {
     if (_curState != _newState)

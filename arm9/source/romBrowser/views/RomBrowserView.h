@@ -44,6 +44,7 @@ public:
         View* currentFocus, FocusMoveDirection direction, View* source) override;
 
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
 
 private:
     SharedPtr<RomBrowserViewModel> _viewModel;

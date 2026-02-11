@@ -112,6 +112,27 @@ View* FileActionMenuBottomSheetView::MoveFocus(View* currentFocus,
 
 }
 
+bool FileActionMenuBottomSheetView::HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+{
+    if (_deleteChip.GetBounds().Contains(touchPosition))
+    {
+        focusManager.Focus(&_deleteChip);
+        if (!_chipSelected)
+        {
+            // First tap selects the chip
+            _chipSelected = true;
+            _deleteChip.SetSelected(true);
+        }
+        else
+        {
+            // Second tap activates delete
+            _romBrowserController->DeleteSelectedFile();
+        }
+        return true;
+    }
+    return false;
+}
+
 bool FileActionMenuBottomSheetView::HandleInput(const InputProvider& inputProvider, FocusManager& focusManager)
 {
     if (inputProvider.Triggered(InputKey::B))

@@ -19,6 +19,7 @@ public:
     void Update() override;
     void Draw(GraphicsContext& graphicsContext) override;
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
     View* MoveFocus(View* currentFocus,
         FocusMoveDirection direction, View* source) override;
 
@@ -27,6 +28,11 @@ public:
     void Focus(FocusManager& focusManager) override
     {
         focusManager.Focus(&_layoutOptions[0]);
+    }
+
+    void Dismiss() override
+    {
+        _viewModel->Close();
     }
 
 private:

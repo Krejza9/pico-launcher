@@ -38,6 +38,7 @@ public:
     View* MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source) override;
 
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
 
     void Focus(FocusManager& focusManager) override
     {
@@ -96,6 +97,7 @@ private:
     Animator<int> _scrollOffsetAnimator;
 
     void UpdatePosition(ViewPoolEntry& viewPoolEntry);
+    int GetItemAtPoint(const Point& screenPoint) const;
     ViewPoolEntry* GetViewPoolEntryByItemIndex(int itemIdx);
     void BindRange(int start, int end);
     ViewPoolEntry* BindViewPoolEntry(int itemIdx);

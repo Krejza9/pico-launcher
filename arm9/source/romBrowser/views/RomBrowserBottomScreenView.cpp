@@ -101,6 +101,15 @@ bool RomBrowserBottomScreenView::HandleInput(const InputProvider& inputProvider,
     return View::HandleInput(inputProvider, focusManager);
 }
 
+bool RomBrowserBottomScreenView::HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+{
+    if (_romBrowserAppBarView.HandleTouch(touchPosition, focusManager))
+        return true;
+    if (_romBrowserView)
+        return _romBrowserView->HandleTouch(touchPosition, focusManager);
+    return false;
+}
+
 void RomBrowserBottomScreenView::RomBrowserViewModelInvalidated(const VramContext& vramContext)
 {
     if (_viewModel->GetRomBrowserViewModel().IsValid())

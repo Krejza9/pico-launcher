@@ -52,6 +52,13 @@ public:
         _state = state;
     }
 
+    /// @brief Invokes the button's action callback.
+    void InvokeAction()
+    {
+        if (_action)
+            _action(this, _actionArg);
+    }
+
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
 
 protected:

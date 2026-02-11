@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "animation/Animator.h"
+#include "core/math/Point.h"
 #include "gui/views/DialogView.h"
 
 class StackVramManager;
@@ -18,6 +19,12 @@ public:
 
     /// @brief Closes the current dialog.
     void CloseDialog();
+
+    /// @brief Handles a touch event, delegating to the current dialog if visible.
+    /// @param touchPos The screen position of the touch.
+    /// @param focusManager The focus manager.
+    /// @return True if the touch was handled by the dialog.
+    bool HandleTouch(const Point& touchPos, FocusManager& focusManager);
 
     /// @brief Updates the dialog presenter.
     void Update();

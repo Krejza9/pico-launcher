@@ -29,9 +29,15 @@ public:
         focusManager.Focus(&_deleteChip);
     }
 
+    void Dismiss() override
+    {
+        _romBrowserController->HideFileActionMenu();
+    }
+
     View* MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source) override;
 
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
 
 private:
     static constexpr u32 LABEL_WIDTH = 224;

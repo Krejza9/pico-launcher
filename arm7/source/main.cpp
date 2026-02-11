@@ -1,5 +1,6 @@
 #include "common.h"
 #include <nds/system.h>
+#include <nds/arm7/touch.h>
 #include <libtwl/sound/sound.h>
 #include <libtwl/sound/soundChannel.h>
 #include <libtwl/sound/soundCapture.h>
@@ -55,6 +56,18 @@ static void vblankIrq(u32 irqMask)
 static void vcountIrq(u32 irqMask)
 {
     SHARED_KEY_XY = REG_RCNT0_H;
+
+    if (touchPenDown())
+    {
+        touchPosition touchPos;
+        touchReadXY(&touchPos);
+        SHARED_TOUCH_XY = (u32)touchPos.px | ((u32)touchPos.py << 16);
+        SHARED_TOUCH_PENDOWN = 1;
+    }
+    else
+    {
+        SHARED_TOUCH_PENDOWN = 0;
+    }
 }
 
 static void mcuIrq(u32 irq2Mask)
@@ -124,6 +137,7 @@ static void initializeArm7()
     sys_setSoundPower(true);
 
     readUserSettings();
+    touchInit();
     pmic_setPowerLedBlink(PMIC_CONTROL_POWER_LED_BLINK_NONE);
 
     sio_setGpioSiIrq(false);

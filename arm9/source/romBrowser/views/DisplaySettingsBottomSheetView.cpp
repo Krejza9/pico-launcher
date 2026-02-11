@@ -226,6 +226,30 @@ void DisplaySettingsBottomSheetView::Draw(GraphicsContext& graphicsContext)
     graphicsContext.ResetClipArea();
 }
 
+bool DisplaySettingsBottomSheetView::HandleTouch(
+    const Point& touchPosition, FocusManager& focusManager)
+{
+    for (auto& layoutOption : _layoutOptions)
+    {
+        if (layoutOption.GetBounds().Contains(touchPosition))
+        {
+            focusManager.Focus(&layoutOption);
+            layoutOption.InvokeAction();
+            return true;
+        }
+    }
+    for (auto& sortOption : _sortOptions)
+    {
+        if (sortOption.GetBounds().Contains(touchPosition))
+        {
+            focusManager.Focus(&sortOption);
+            sortOption.InvokeAction();
+            return true;
+        }
+    }
+    return false;
+}
+
 bool DisplaySettingsBottomSheetView::HandleInput(
     const InputProvider& inputProvider, FocusManager& focusManager)
 {

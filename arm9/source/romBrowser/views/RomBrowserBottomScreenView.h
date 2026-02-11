@@ -41,6 +41,7 @@ public:
     }
 
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
 
     void RomBrowserViewModelInvalidated(const VramContext& vramContext);
 

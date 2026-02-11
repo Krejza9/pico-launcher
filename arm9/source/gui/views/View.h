@@ -57,6 +57,15 @@ public:
         return false;
     }
 
+    /// @brief Handles a touch event at the given screen position.
+    /// @param touchPosition The screen position of the touch.
+    /// @param focusManager The focus manager.
+    /// @return True if the touch was handled, or false otherwise.
+    virtual bool HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+    {
+        return false;
+    }
+
     /// @brief Gets the bounds of the view.
     /// @return The bounds of the view.
     virtual Rectangle GetBounds() const = 0;

@@ -91,6 +91,21 @@ View* AppBarView::MoveFocus(View* currentFocus, FocusMoveDirection direction, Vi
         return View::MoveFocus(currentFocus, direction, this);
 }
 
+bool AppBarView::HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+{
+    int totalButtons = _startButtonCount + _endButtonCount;
+    for (int i = 0; i < totalButtons; i++)
+    {
+        if (_buttons[i]->GetBounds().Contains(touchPosition))
+        {
+            focusManager.Focus(_buttons[i]);
+            _buttons[i]->InvokeAction();
+            return true;
+        }
+    }
+    return false;
+}
+
 void AppBarView::Focus(FocusManager& focusManager, int button)
 {
     focusManager.Focus(_buttons[button]);

@@ -24,6 +24,7 @@ public:
     }
 
     View* MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source) override;
+    bool HandleTouch(const Point& touchPosition, FocusManager& focusManager) override;
 
     void Focus(FocusManager& focusManager)
     {

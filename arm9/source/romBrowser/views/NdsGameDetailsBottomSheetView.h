@@ -30,6 +30,11 @@ public:
         focusManager.Focus(&_cheatsChip);
     }
 
+    void Dismiss() override
+    {
+        _romBrowserController->HideGameInfo();
+    }
+
     View* MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source) override;
 
     bool HandleInput(const InputProvider& inputProvider, FocusManager& focusManager) override;

@@ -337,6 +337,88 @@ bool RecyclerView::HandleInput(const InputProvider& inputProvider, FocusManager&
     return View::HandleInput(inputProvider, focusManager);
 }
 
+int RecyclerView::GetItemAtPoint(const Point& screenPoint) const
+{
+    int localX = screenPoint.x - _position.x - _xOffset;
+    int localY = screenPoint.y - _position.y - _yOffset;
+
+    int col, row, itemIdx;
+    int cellW = _xSpacing + _itemWidth;
+    int cellH = _ySpacing + _itemHeight;
+
+    switch (_mode)
+    {
+        case Mode::VerticalGrid:
+        {
+            col = (localX - _xPadding) / cellW;
+            row = (localY - _yPadding) / cellH;
+            int itemLocalX = (localX - _xPadding) % cellW;
+            int itemLocalY = (localY - _yPadding) % cellH;
+            if (itemLocalX < 0 || itemLocalX >= _itemWidth ||
+                itemLocalY < 0 || itemLocalY >= _itemHeight)
+                return -1;
+            if (col < 0 || col >= _columns || row < 0)
+                return -1;
+            itemIdx = row * _columns + col;
+            break;
+        }
+        case Mode::VerticalList:
+        {
+            row = (localY - _yPadding) / cellH;
+            int itemLocalY = (localY - _yPadding) % cellH;
+            if (itemLocalY < 0 || itemLocalY >= _itemHeight || row < 0)
+                return -1;
+            itemIdx = row;
+            break;
+        }
+        case Mode::HorizontalGrid:
+        {
+            col = (localX - _xPadding) / cellW;
+            row = (localY - _yPadding) / cellH;
+            int itemLocalX = (localX - _xPadding) % cellW;
+            int itemLocalY = (localY - _yPadding) % cellH;
+            if (itemLocalX < 0 || itemLocalX >= _itemWidth ||
+                itemLocalY < 0 || itemLocalY >= _itemHeight)
+                return -1;
+            if (col < 0 || row < 0 || row >= _rows)
+                return -1;
+            itemIdx = col * _rows + row;
+            break;
+        }
+        case Mode::HorizontalList:
+        {
+            col = (localX - _xPadding) / cellW;
+            int itemLocalX = (localX - _xPadding) % cellW;
+            if (itemLocalX < 0 || itemLocalX >= _itemWidth || col < 0)
+                return -1;
+            itemIdx = col;
+            break;
+        }
+        default:
+            return -1;
+    }
+
+    if (itemIdx < 0 || itemIdx >= (int)_itemCount)
+        return -1;
+    return itemIdx;
+}
+
+bool RecyclerView::HandleTouch(const Point& touchPos, FocusManager& focusManager)
+{
+    if (!GetBounds().Contains(touchPos) || _itemCount == 0)
+        return false;
+
+    int itemIdx = GetItemAtPoint(touchPos);
+    if (itemIdx < 0)
+        return false;
+
+    focusManager.Unfocus();
+    SetSelectedItem(itemIdx);
+    if (_selectedItem)
+        focusManager.Focus(_selectedItem->view);
+    return true;
+}
+
 Point RecyclerView::GetItemPosition(int itemIdx)
 {
     int x = 0;

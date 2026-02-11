@@ -18,4 +18,7 @@ public:
     ///        this dialog for the purpose of culling views behind it.
     /// @return A rectangle that is fully covered by the dialog.
     virtual Rectangle GetFullyCoveredArea() const = 0;
+
+    /// @brief Dismisses the dialog through the proper controller path.
+    virtual void Dismiss() = 0;
 };

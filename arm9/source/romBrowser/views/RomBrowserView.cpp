@@ -79,6 +79,17 @@ View* RomBrowserView::MoveFocus(View* currentFocus, FocusMoveDirection direction
     return nullptr;
 }
 
+bool RomBrowserView::HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+{
+    if (_fileGridView->HandleTouch(touchPosition, focusManager))
+    {
+        _viewModel->SetSelectedItem(_fileGridView->GetSelectedItem());
+        _viewModel->ItemActivated();
+        return true;
+    }
+    return false;
+}
+
 bool RomBrowserView::HandleInput(const InputProvider& inputProvider, FocusManager& focusManager)
 {
     if (inputProvider.Triggered(InputKey::A))

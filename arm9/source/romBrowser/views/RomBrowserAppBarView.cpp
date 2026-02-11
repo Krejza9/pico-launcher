@@ -114,6 +114,11 @@ void RomBrowserAppBarView::VBlank()
     _appBarView->VBlank();
 }
 
+bool RomBrowserAppBarView::HandleTouch(const Point& touchPosition, FocusManager& focusManager)
+{
+    return _appBarView->HandleTouch(touchPosition, focusManager);
+}
+
 View* RomBrowserAppBarView::MoveFocus(View* currentFocus, FocusMoveDirection direction, View* source)
 {
     if (currentFocus == nullptr)
